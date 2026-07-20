@@ -1,0 +1,40 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/andel-data-exchange-openapi.yaml
+docs: https://build.andel.org/dataexchange/overview/overview
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+  - authorizationCode
+  token_issuer: Descope
+  token_url: https://api.descope.com/oauth2/v1/apps/token
+  scopes:
+  - purchases:read
+  notes: >-
+    Production is an OAuth 2.0 client-credentials (machine-to-machine) flow with
+    tokens issued by Descope and presented as HTTP bearer tokens. Access tokens
+    carry a `plans` claim used for per-plan authorization enforcement. A
+    developer-exploration authorization-code + PKCE flow (Postman Guided Auth)
+    is also supported. The OpenAPI models both as `http`/`bearer` schemes; the
+    OAuth grant detail is documented in the Data Exchange overview.
+schemes:
+- name: andelDescopeClientCredentials
+  type: http
+  scheme: bearer
+  grant: clientCredentials
+  token_url: https://api.descope.com/oauth2/v1/apps/token
+  scopes:
+  - purchases:read
+  description: Production machine-to-machine flow. Tokens issued by Descope.
+  sources:
+  - openapi/andel-data-exchange-openapi.yaml
+- name: andelDescopeAuthCode
+  type: http
+  scheme: bearer
+  grant: authorizationCode
+  description: Developer-exploration flow with PKCE. Used by Postman Guided Auth.
+  sources:
+  - openapi/andel-data-exchange-openapi.yaml
