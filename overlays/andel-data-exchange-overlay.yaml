@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Andel Data Exchange API
+  version: 1.0.0
+extends: openapi/andel-data-exchange-openapi.yaml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-rating: 4
+    x-apievangelist-domain: healthcare-pharmacy
+    x-apievangelist-notes: >-
+      RFC 9457 errors, OAuth2 (Descope) bearer auth with per-plan `plans` claim,
+      cursor pagination, purchase.created webhooks, and a Postman mock sandbox.
+- target: $.info
+  update:
+    x-agentic-access-ref: agentic-access/andel-agentic-access.yml
+    x-conventions-ref: conventions/andel-conventions.yml
+    x-errors-ref: errors/andel-problem-types.yml
+- target: $.tags
+  update:
+  - name: purchases
+    description: Member purchase events exposed to authorized plans and PBMs.
+  - name: webhooks
+    description: Subscription management for purchase.created event delivery.

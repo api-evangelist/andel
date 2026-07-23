@@ -1,0 +1,16 @@
+{
+  "provider": "andel",
+  "sources": [
+    "andel-purchases-api-openapi.yml",
+    "andel-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "andel-purchases-api-openapi.yml",
+    "andel-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

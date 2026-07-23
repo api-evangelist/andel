@@ -1,0 +1,45 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/andel-data-exchange-openapi.yaml
+docs: https://build.andel.org/dataexchange/overview/overview
+authentication:
+  style: oauth2-bearer
+  issuer: Descope
+  scopes: [purchases:read]
+  tenant_isolation: token `plans` claim enforces per-plan visibility
+  ref: authentication/andel-authentication.yml
+pagination:
+  style: cursor
+  params:
+    since: Cursor or ISO 8601 UTC timestamp; returns purchases after this point.
+    until: ISO 8601 UTC timestamp upper bound (exclusive).
+    limit: Max results per page.
+  ordering: purchased_at descending
+  notes: List endpoints are ordered by `purchased_at` descending; page forward with `since`.
+idempotency:
+  supported: false
+  notes: No idempotency-key header is documented; write surface is limited to webhook subscription create/delete.
+request_tracing:
+  field: andel_request_id
+  location: error body (Problem) extension
+  notes: Every Problem response carries andel_request_id; pass to support to trace a request.
+error_envelope:
+  format: rfc9457
+  media_type: application/json
+  schema: Problem
+  ref: errors/andel-problem-types.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /exchange/v1
+rate_limiting:
+  signalled: true
+  mechanism: HTTP 429 on the purchases endpoint
+webhooks:
+  supported: true
+  event_types: [purchase.created]
+  ref: asyncapi/andel-data-exchange-webhooks.yml
+domain_note: >-
+  The Data Exchange API is positioned as a purchase-data interchange, not a
+  regulated-claims feed, and maps to the Express Scripts CDH 1500-byte
+  accumulator format (ESI compatibility).

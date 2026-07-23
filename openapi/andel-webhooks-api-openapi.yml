@@ -1,0 +1,250 @@
+openapi: 3.1.0
+info:
+  title: Data Exchange purchases webhooks API
+  version: 1.0.0
+servers:
+- url: https://api.andel.org/exchange/v1
+  description: Production
+- url: https://7403d846-765d-4d63-9e5c-b7f0ab21a354.mock.pstmn.io/exchange/v1
+  description: Postman mock server (sandbox; auth is not enforced)
+tags:
+- name: webhooks
+paths:
+  /webhooks/subscriptions:
+    get:
+      operationId: listSubscriptions
+      summary: List your webhook subscriptions
+      tags:
+      - webhooks
+      parameters:
+      - name: Authorization
+        in: header
+        description: Production machine-to-machine flow. Tokens issued by Descope.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of subscriptions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    post:
+      operationId: createSubscription
+      summary: Subscribe to purchase events
+      tags:
+      - webhooks
+      parameters:
+      - name: Authorization
+        in: header
+        description: Production machine-to-machine flow. Tokens issued by Descope.
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Subscription created. The response includes the signing secret used to verify webhook payloads.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionWithSecret'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+  /webhooks/subscriptions/{subscription_id}:
+    delete:
+      operationId: deleteSubscription
+      summary: Delete a webhook subscription
+      tags:
+      - webhooks
+      parameters:
+      - name: subscription_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Authorization
+        in: header
+        description: Production machine-to-machine flow. Tokens issued by Descope.
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Subscription deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  schemas:
+    SubscriptionCreate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: HTTPS endpoint where Andel will POST events.
+        event_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
+        description:
+          type: string
+          description: Human-readable label for this subscription.
+      required:
+      - url
+      - event_types
+      title: SubscriptionCreate
+    Subscription:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        event_types:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - subscription_id
+      - url
+      - event_types
+      - created_at
+      title: Subscription
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        andel_request_id:
+          type: string
+          description: Pass to support to trace this request.
+      required:
+      - type
+      - title
+      - status
+      description: RFC 9457 problem details with Andel extensions.
+      title: Problem
+    SubscriptionWithSecret:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        event_types:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        signing_secret:
+          type: string
+          description: Secret used to verify the X-Andel-Signature header on webhook deliveries. Returned once at creation.
+      required:
+      - subscription_id
+      - url
+      - event_types
+      - created_at
+      - signing_secret
+      title: SubscriptionWithSecret
+    SubscriptionCreateEventTypesItems:
+      type: string
+      enum:
+      - purchase.created
+      title: SubscriptionCreateEventTypesItems
+    SubscriptionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+      required:
+      - data
+      title: SubscriptionList
+  securitySchemes:
+    andelDescopeClientCredentials:
+      type: http
+      scheme: bearer
+      description: Production machine-to-machine flow. Tokens issued by Descope.
+    andelDescopeAuthCode:
+      type: http
+      scheme: bearer
+      description: Developer-exploration flow with PKCE. Used by Postman Guided Auth.

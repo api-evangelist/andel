@@ -1,25 +1,132 @@
 aid: andel
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/andel.png
 name: Andel
-description: Andel is a company surfaced as a portfolio company of seedcamp and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Andel is a cooperative marketplace for drug affordability that unlocks direct
+  manufacturer pricing on high-spend specialty medications, connecting health
+  plans, PBMs, and members without rebates, spreads, or intermediaries across
+  neurology, immunology, dermatology, oncology, fertility, cardiometabolic, and
+  rare/orphan therapeutic areas. Its Data Exchange API provides real-time,
+  RFC 9457-compliant interchange of member purchase events between Andel and
+  counterparty plans or PBMs, with OAuth 2.0 machine-to-machine authentication
+  via Descope, per-plan authorization, cursor pagination, purchase.created
+  webhooks, and Express Scripts (ESI) CDH accumulator-format compatibility.
 url: https://raw.githubusercontent.com/api-evangelist/andel/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - seedcamp
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profile
+x-tier-reason: enriched-from-live-api
 specificationVersion: '0.20'
 created: '2026-07-17'
 modified: '2026-07-17'
 tags:
 - Company
-apis: []
+- Healthcare
+- Pharmacy
+- Pharmacy Benefits
+- Drug Pricing
+- Specialty Medications
+- Data Exchange
+- Webhooks
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: andel:andel-purchases-api
+  name: Andel purchases API
+  description: The purchases API from Andel — 2 operation(s) for purchases.
+  humanURL: https://build.andel.org/dataexchange
+  baseURL: https://api.andel.org/exchange/v1
+  tags:
+  - purchases
+  properties:
+  - type: OpenAPI
+    url: openapi/andel-purchases-api-openapi.yml
+  - type: Documentation
+    url: https://build.andel.org/dataexchange/overview/overview
+- aid: andel:andel-webhooks-api
+  name: Andel webhooks API
+  description: The webhooks API from Andel — 2 operation(s) for webhooks.
+  humanURL: https://build.andel.org/dataexchange
+  baseURL: https://api.andel.org/exchange/v1
+  tags:
+  - webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/andel-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://build.andel.org/dataexchange/overview/overview
 common:
+- type: DeveloperPortal
+  url: https://build.andel.org
+- type: Documentation
+  url: https://build.andel.org/home/welcome/welcome
+- type: APIReference
+  url: https://build.andel.org/dataexchange
+- type: GettingStarted
+  url: https://build.andel.org/dataexchange/overview/overview
+- type: Blog
+  url: https://www.andel.org/blog
+- type: Support
+  url: https://www.andel.org/contact
+- type: SignUp
+  url: https://www.andel.org/contact
+- type: TermsOfService
+  url: https://www.andel.org/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://www.andel.org/privacy-policy
+- type: StatusPage
+  url: https://status.andel.org
+- type: MCPServer
+  url: mcp/andel-mcp.yml
+- type: LLMsTxt
+  url: llms/andel-llms.txt
+- type: Authentication
+  url: authentication/andel-authentication.yml
+- type: OAuthScopes
+  url: scopes/andel-scopes.yml
+- type: ErrorCatalog
+  url: errors/andel-problem-types.yml
+- type: Conventions
+  url: conventions/andel-conventions.yml
+- type: Lifecycle
+  url: lifecycle/andel-lifecycle.yml
+- type: Sandbox
+  url: sandbox/andel-sandbox.yml
+- type: DataModel
+  url: data-model/andel-data-model.yml
+- type: Conformance
+  url: conformance/andel-conformance.yml
+- type: Overlay
+  url: overlays/andel-data-exchange-overlay.yaml
+- type: Webhooks
+  url: asyncapi/andel-data-exchange-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/andel-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/andel-agentic-access.yml
 - type: Website
-  url: http://andel.org
+  url: https://www.andel.org
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

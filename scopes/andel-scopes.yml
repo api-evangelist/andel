@@ -1,0 +1,22 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/andel-data-exchange-openapi.yaml
+docs: https://build.andel.org/dataexchange/overview/overview
+issuer: Descope
+token_url: https://api.descope.com/oauth2/v1/apps/token
+schemes:
+- name: andelDescopeClientCredentials
+  grant: clientCredentials
+  token_url: https://api.descope.com/oauth2/v1/apps/token
+scopes:
+- scope: purchases:read
+  description: >-
+    Read access to member purchase events on the Data Exchange API. Required to
+    call GET /purchases and GET /purchases/{purchase_id}. Tokens additionally
+    carry a `plans` claim that scopes visibility to the plans the tenant is
+    authorized for.
+  grants:
+  - clientCredentials
+  operations:
+  - listPurchases
+  - getPurchase

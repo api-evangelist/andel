@@ -1,0 +1,22 @@
+generated: '2026-07-17'
+method: searched
+status: published
+source: https://build.andel.org/llms.txt
+server:
+  name: andel-docs
+  transport: http
+  url: https://build.andel.org/_mcp/server
+  implementation: fern-docs-mcp-server
+  protocol: 2024-11-05
+description: >-
+  Andel publishes a hosted, remote MCP server for its developer documentation
+  (Fern docs MCP). AI clients (Claude Code, Cursor, etc.) connect to it to
+  search and retrieve Andel Data Exchange API docs. It is a documentation MCP
+  server (searchDocs-style tools) rather than an API-operations server.
+tools:
+- name: searchDocs
+  description: Search the documentation at https://build.andel.org and return relevant sections.
+notes: >-
+  Verified live via an MCP initialize + tools/list handshake on 2026-07-17
+  (serverInfo.name = fern-docs-mcp-server). Advertised in the site llms.txt as
+  the recommended AI-client integration point.

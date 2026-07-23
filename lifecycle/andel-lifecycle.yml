@@ -1,0 +1,20 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/andel-data-exchange-openapi.yaml
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /exchange/v1
+  docs: https://build.andel.org/dataexchange/overview/overview
+status_page: https://status.andel.org
+deprecation:
+  policy_url: null
+  sunset_header: null
+  notes: No formal deprecation policy or Sunset/Deprecation header support documented at this time.
+sla:
+  url: null
+deprecated_operations: []
+notes: >-
+  The Data Exchange API is at v1 (uri-path versioned under /exchange/v1).
+  A public status page is published at status.andel.org. A production inbound
+  endpoint for deductible feeds is described as planned/future.

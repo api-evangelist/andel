@@ -1,0 +1,11 @@
+generated: '2026-07-17'
+method: generated
+skills:
+- file: andel-read-purchases.md
+  name: Read member purchases from the Andel Data Exchange
+  api: openapi/andel-data-exchange-openapi.yaml
+  operations: [listPurchases, getPurchase]
+- file: andel-subscribe-webhooks.md
+  name: Subscribe to Andel purchase webhooks
+  api: openapi/andel-data-exchange-openapi.yaml
+  operations: [createSubscription, listSubscriptions, deleteSubscription]

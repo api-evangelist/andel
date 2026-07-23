@@ -1,0 +1,33 @@
+generated: '2026-07-17'
+method: searched
+source: https://build.andel.org/dataexchange/data-exchange-api/webhooks/create-subscription
+spec_type: Webhooks
+transport: https-webhook
+delivery: Andel POSTs events to a subscriber-registered HTTPS endpoint.
+management_api:
+  base_path: /exchange/v1
+  operations:
+  - operationId: listSubscriptions
+    method: GET
+    path: /webhooks/subscriptions
+    summary: List your webhook subscriptions
+  - operationId: createSubscription
+    method: POST
+    path: /webhooks/subscriptions
+    summary: Subscribe to purchase events
+  - operationId: deleteSubscription
+    method: DELETE
+    path: /webhooks/subscriptions/{subscription_id}
+    summary: Delete a webhook subscription
+subscription:
+  required: [url, event_types]
+  url: HTTPS endpoint where Andel will POST events.
+  secret: Returned once on creation (SubscriptionWithSecret) for signature verification.
+events:
+- type: purchase.created
+  description: Emitted when a new member purchase is recorded on the Data Exchange.
+  payload_schema: Purchase
+notes: >-
+  The Data Exchange API documents a webhook surface (subscription management +
+  purchase.created delivery) but does not publish a standalone AsyncAPI document.
+  This artifact captures the webhook catalog; no AsyncAPI spec was fabricated.

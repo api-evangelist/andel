@@ -1,0 +1,759 @@
+openapi: 3.1.0
+info:
+  title: Data Exchange API
+  version: 1.0.0
+paths:
+  /purchases:
+    get:
+      operationId: listPurchases
+      summary: List purchases
+      description: |
+        List purchases visible to the authenticated tenant, ordered by
+        `purchased_at` descending. Use cursor pagination via `since` and `limit`.
+      tags:
+        - purchases
+      parameters:
+        - name: member_id
+          in: query
+          description: Filter purchases to a single member.
+          required: false
+          schema:
+            type: string
+        - name: plan_id
+          in: query
+          description: >-
+            Filter purchases to a single plan. Must be one of the plans the token is authorized for; otherwise the API
+            returns `403 Forbidden`.
+          required: false
+          schema:
+            type: string
+        - name: ndc
+          in: query
+          description: Filter to a single NDC-11 drug code.
+          required: false
+          schema:
+            type: string
+        - name: prescriber_spi
+          in: query
+          description: Filter to purchases written by a specific prescriber (Surescripts SPI).
+          required: false
+          schema:
+            type: string
+        - name: event_type
+          in: query
+          description: Filter purchases to a single event type (e.g., only reversals).
+          required: false
+          schema:
+            $ref: '#/components/schemas/PurchasesGetParametersEventType'
+        - name: status
+          in: query
+          description: Filter purchases by processing status (e.g., only rejected).
+          required: false
+          schema:
+            $ref: '#/components/schemas/PurchasesGetParametersStatus'
+        - name: since
+          in: query
+          description: Cursor or ISO 8601 UTC timestamp. Returns purchases after this point.
+          required: false
+          schema:
+            type: string
+        - name: until
+          in: query
+          description: ISO 8601 UTC timestamp upper bound (exclusive).
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          description: Max results per page.
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: Authorization
+          in: header
+          description: Production machine-to-machine flow. Tokens issued by Descope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A page of purchases.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseList'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '403':
+          description: Token lacks the required scope, or is not authorized for the requested `plan_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '429':
+          description: Too many requests. Backoff and retry.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /purchases/{purchase_id}:
+    get:
+      operationId: getPurchase
+      summary: Get a single purchase
+      tags:
+        - purchases
+      parameters:
+        - name: purchase_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Authorization
+          in: header
+          description: Production machine-to-machine flow. Tokens issued by Descope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single purchase.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Purchase'
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '403':
+          description: Token lacks the required scope, or is not authorized for the requested `plan_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /webhooks/subscriptions:
+    get:
+      operationId: listSubscriptions
+      summary: List your webhook subscriptions
+      tags:
+        - webhooks
+      parameters:
+        - name: Authorization
+          in: header
+          description: Production machine-to-machine flow. Tokens issued by Descope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of subscriptions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    post:
+      operationId: createSubscription
+      summary: Subscribe to purchase events
+      tags:
+        - webhooks
+      parameters:
+        - name: Authorization
+          in: header
+          description: Production machine-to-machine flow. Tokens issued by Descope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Subscription created. The response includes the signing secret used to verify webhook payloads.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionWithSecret'
+        '400':
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionCreate'
+  /webhooks/subscriptions/{subscription_id}:
+    delete:
+      operationId: deleteSubscription
+      summary: Delete a webhook subscription
+      tags:
+        - webhooks
+      parameters:
+        - name: subscription_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: Authorization
+          in: header
+          description: Production machine-to-machine flow. Tokens issued by Descope.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Subscription deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          description: Missing or invalid token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+servers:
+  - url: https://api.andel.org/exchange/v1
+    description: Production
+  - url: https://7403d846-765d-4d63-9e5c-b7f0ab21a354.mock.pstmn.io/exchange/v1
+    description: Postman mock server (sandbox; auth is not enforced)
+components:
+  schemas:
+    PurchasesGetParametersEventType:
+      type: string
+      enum:
+        - claim
+        - reversal
+        - adjustment
+        - hra_initial_load
+        - hra_rollover
+        - hra_incentive
+      title: PurchasesGetParametersEventType
+    PurchasesGetParametersStatus:
+      type: string
+      enum:
+        - accepted
+        - rejected
+        - pended
+        - reversed
+      title: PurchasesGetParametersStatus
+    PurchaseProviderType:
+      type: string
+      enum:
+        - ncpdp
+        - npi
+        - dea
+        - copay_assist
+      description: Qualifier describing which provider identifier is carried in the provider slot.
+      title: PurchaseProviderType
+    PurchaseNetworkInd:
+      type: string
+      enum:
+        - in_network
+        - out_of_network
+        - both
+        - inn_house
+      description: Whether the fill adjudicated in- or out-of-network.
+      title: PurchaseNetworkInd
+    PurchaseEventType:
+      type: string
+      enum:
+        - claim
+        - reversal
+        - adjustment
+        - hra_initial_load
+        - hra_rollover
+        - hra_incentive
+      default: claim
+      description: >-
+        The kind of accumulator event. `claim` is a normal fill; `reversal` restores accumulators for a returned or
+        voided fill; `adjustment` is a flat or paired correction.
+      title: PurchaseEventType
+    PurchaseStatus:
+      type: string
+      enum:
+        - accepted
+        - rejected
+        - pended
+        - reversed
+      description: Processing status of the purchase.
+      title: PurchaseStatus
+    PurchaseGender:
+      type: string
+      enum:
+        - unknown
+        - male
+        - female
+        - non_binary
+      description: Member gender as carried to the PBM.
+      title: PurchaseGender
+    PurchaseRelationship:
+      type: string
+      enum:
+        - subscriber
+        - spouse
+        - dependent
+        - student
+        - disabled_dependent
+        - adult_dependent
+        - domestic_partner
+      description: Member's relationship to the subscriber.
+      title: PurchaseRelationship
+    AccumulatorTypeOfBenefitAccount:
+      type: string
+      enum:
+        - hra
+        - deductible
+        - oop
+        - cap
+        - lifetime_cap
+        - drug_cap
+        - benefit_deductible
+        - benefit_oop
+        - base_deductible
+        - base_oop
+        - tmoop
+      description: Which benefit accumulator this delta applies to.
+      title: AccumulatorTypeOfBenefitAccount
+    AccumulatorParticipationType:
+      type: string
+      enum:
+        - in_network
+        - out_of_network
+        - combined
+        - inn_house
+      description: Network level this accumulator tracks (may differ per accumulator).
+      title: AccumulatorParticipationType
+    AccumulatorCrDbIndicator:
+      type: string
+      enum:
+        - debit
+        - credit
+        - replace
+        - bypass
+      description: >-
+        `debit` consumes the accumulator, `credit` restores it (a reversal), `replace` overwrites the running total,
+        `bypass` ignores this accumulator for this transaction.
+      title: AccumulatorCrDbIndicator
+    Accumulator:
+      type: object
+      properties:
+        type_of_benefit_account:
+          $ref: '#/components/schemas/AccumulatorTypeOfBenefitAccount'
+          description: Which benefit accumulator this delta applies to.
+        participation_type:
+          $ref: '#/components/schemas/AccumulatorParticipationType'
+          description: Network level this accumulator tracks (may differ per accumulator).
+        amount:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Dollars applied to this accumulator on this purchase, USD.
+        cr_db_indicator:
+          $ref: '#/components/schemas/AccumulatorCrDbIndicator'
+          description: >-
+            `debit` consumes the accumulator, `credit` restores it (a reversal), `replace` overwrites the running total,
+            `bypass` ignores this accumulator for this transaction.
+        accumulated_amount:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Running total applied to date, USD. Required by ESI for `replace`.
+        remaining_amount:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Amount left before the accumulator cap is met, USD.
+        met_this_transaction:
+          type: boolean
+          description: True when this purchase drove `remaining_amount` to zero (e.g., deductible met on this fill).
+      required:
+        - type_of_benefit_account
+        - amount
+        - cr_db_indicator
+      description: A per-accumulator delta applied by a purchase. A single fill can apply against up to six accumulators at once.
+      title: Accumulator
+    PurchaseOriginCode:
+      type: string
+      enum:
+        - E
+        - R
+      description: >-
+        ESI origin code for HRA balance events (`hra_initial_load`, `hra_rollover`, `hra_incentive`); `E` is a
+        non-shared pharmacy dollars load. Omitted for pharmacy fills.
+      title: PurchaseOriginCode
+    EsiIdentityTransmissionType:
+      type: string
+      enum:
+        - DQ
+        - DR
+      description: Data Request (sent) vs Data Response (acknowledged).
+      title: EsiIdentityTransmissionType
+    EsiIdentityRequestCode:
+      type: string
+      enum:
+        - '01'
+        - '02'
+        - '04'
+      description: Claim / Reversal / Adjustment request code.
+      title: EsiIdentityRequestCode
+    EsiIdentity:
+      type: object
+      properties:
+        sender_id:
+          type: string
+          description: ESI-assigned trading-partner sender identifier.
+        receiver_id:
+          type: string
+          description: Receiver identifier; `MHS` when sending to ESI.
+        signature:
+          type: string
+          description: 26-character composite transaction key (date + milliseconds + sequence + source-app code).
+        claim_id:
+          type: string
+          description: ESI claim identifier.
+        claim_xref_id:
+          type: string
+          description: Original-transaction reference on a reversal or adjustment. Mirrors `original_purchase_id`.
+        transmission_type:
+          $ref: '#/components/schemas/EsiIdentityTransmissionType'
+          description: Data Request (sent) vs Data Response (acknowledged).
+        request_code:
+          $ref: '#/components/schemas/EsiIdentityRequestCode'
+          description: Claim / Reversal / Adjustment request code.
+        response_code:
+          type: string
+          description: ESI Data Response code; `00` is accepted, otherwise an error code.
+        reason_code:
+          type: string
+          description: Granular reason detail beyond the response code.
+      description: >-
+        ESI wire-protocol identifiers, populated when a purchase is exchanged via the ESI CDH format. All fields
+        optional.
+      title: EsiIdentity
+    Purchase:
+      type: object
+      properties:
+        purchase_id:
+          type: string
+          format: uuid
+          description: Andel-issued unique identifier.
+        member_id:
+          type: string
+          description: Plan or PBM member identifier.
+        plan_id:
+          type: string
+          description: >-
+            Plan that the member belongs to. Each member belongs to exactly one plan. Tokens are scoped to a set of
+            allowed plan IDs; purchases for plans outside that set are not returned.
+        purchased_at:
+          type: string
+          format: date-time
+          description: ISO 8601 UTC timestamp from the pharmacy point-of-sale.
+        ndc:
+          type: string
+          description: 11-digit National Drug Code.
+        prescriber_spi:
+          type: string
+          description: Surescripts Prescriber ID.
+        member_purchase_amount:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Total amount the member paid at point-of-sale, USD.
+        oop_amount:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Member out-of-pocket portion, USD.
+        plan_contribution:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Plan's portion of the purchase (the plan contribution), USD.
+        quantity:
+          type: integer
+          description: Units dispensed.
+        currency:
+          type: string
+          default: USD
+          description: ISO 4217 currency code.
+        date_of_service:
+          type: string
+          format: date
+          description: >-
+            The actual fill date used for eligibility validation. Distinct from `purchased_at`, which is the
+            point-of-sale timestamp.
+        days_supply:
+          type: integer
+          description: Days of therapy the dispensed quantity covers.
+        provider_type:
+          $ref: '#/components/schemas/PurchaseProviderType'
+          description: Qualifier describing which provider identifier is carried in the provider slot.
+        pharmacy_npi:
+          type: string
+          description: Dispensing pharmacy identifier, when provided.
+        network_ind:
+          $ref: '#/components/schemas/PurchaseNetworkInd'
+          description: Whether the fill adjudicated in- or out-of-network.
+        event_type:
+          $ref: '#/components/schemas/PurchaseEventType'
+          description: >-
+            The kind of accumulator event. `claim` is a normal fill; `reversal` restores accumulators for a returned or
+            voided fill; `adjustment` is a flat or paired correction.
+        original_purchase_id:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: For reversals or adjustments, the `purchase_id` of the purchase being corrected. Null for new purchases.
+        status:
+          $ref: '#/components/schemas/PurchaseStatus'
+          description: Processing status of the purchase.
+        deductible_applied:
+          type: number
+          format: double
+          description: (Proposed - provenance pending) Amount of this purchase applied to the member's deductible, USD.
+        subscriber_id:
+          type: string
+          description: The member's subscriber identifier at the PBM's eligibility system. Distinct from `member_id`.
+        first_name:
+          type: string
+          description: Member first name.
+        last_name:
+          type: string
+          description: Member last name.
+        date_of_birth:
+          type: string
+          format: date
+          description: Member date of birth.
+        gender:
+          $ref: '#/components/schemas/PurchaseGender'
+          description: Member gender as carried to the PBM.
+        relationship:
+          $ref: '#/components/schemas/PurchaseRelationship'
+          description: Member's relationship to the subscriber.
+        accumulators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Accumulator'
+          description: >-
+            (Proposed - provenance pending) Per-accumulator deltas this purchase applies (deductible, out-of-pocket,
+            HRA, caps). A single fill can apply against up to six accumulators at once.
+        origin_code:
+          $ref: '#/components/schemas/PurchaseOriginCode'
+          description: >-
+            ESI origin code for HRA balance events (`hra_initial_load`, `hra_rollover`, `hra_incentive`); `E` is a
+            non-shared pharmacy dollars load. Omitted for pharmacy fills.
+        plan_year:
+          type: integer
+          description: Plan year the balance applies to. Used for HRA balance events.
+        esi:
+          $ref: '#/components/schemas/EsiIdentity'
+      required:
+        - purchase_id
+        - member_id
+        - plan_id
+        - purchased_at
+        - currency
+        - date_of_service
+        - event_type
+      title: Purchase
+    PurchaseList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Purchase'
+        next_cursor:
+          type:
+            - string
+            - 'null'
+          description: Pass as `since` to fetch the next page. Null when no more pages.
+      required:
+        - data
+        - next_cursor
+      title: PurchaseList
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        andel_request_id:
+          type: string
+          description: Pass to support to trace this request.
+      required:
+        - type
+        - title
+        - status
+      description: RFC 9457 problem details with Andel extensions.
+      title: Problem
+    Subscription:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        event_types:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - subscription_id
+        - url
+        - event_types
+        - created_at
+      title: Subscription
+    SubscriptionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+      required:
+        - data
+      title: SubscriptionList
+    SubscriptionCreateEventTypesItems:
+      type: string
+      enum:
+        - purchase.created
+      title: SubscriptionCreateEventTypesItems
+    SubscriptionCreate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: HTTPS endpoint where Andel will POST events.
+        event_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
+        description:
+          type: string
+          description: Human-readable label for this subscription.
+      required:
+        - url
+        - event_types
+      title: SubscriptionCreate
+    SubscriptionWithSecret:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        event_types:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        signing_secret:
+          type: string
+          description: Secret used to verify the X-Andel-Signature header on webhook deliveries. Returned once at creation.
+      required:
+        - subscription_id
+        - url
+        - event_types
+        - created_at
+        - signing_secret
+      title: SubscriptionWithSecret
+  securitySchemes:
+    andelDescopeClientCredentials:
+      type: http
+      scheme: bearer
+      description: Production machine-to-machine flow. Tokens issued by Descope.
+    andelDescopeAuthCode:
+      type: http
+      scheme: bearer
+      description: Developer-exploration flow with PKCE. Used by Postman Guided Auth.

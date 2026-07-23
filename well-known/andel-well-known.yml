@@ -1,0 +1,26 @@
+generated: '2026-07-17'
+method: searched
+source: live probes 2026-07-17
+hosts:
+- host: https://www.andel.org
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://build.andel.org
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+notes: >-
+  No /.well-known/ discovery documents were served on the andel.org or
+  build.andel.org hosts as of 2026-07-17. Recorded as honest negative results;
+  no WellKnown/SecurityTxt pointer is emitted.

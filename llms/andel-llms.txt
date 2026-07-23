@@ -1,0 +1,27 @@
+# Andel | Developer Docs
+
+## Instructions for AI Agents
+
+- For clean Markdown of any page, append `.md` to the page URL
+- For section-specific indexes, append `/llms.txt` to any section URL
+- For AI client integration (Claude Code, Cursor, etc.), connect to the MCP server at https://build.andel.org/_mcp/server
+
+## Docs
+
+- [Andel Developer Docs](https://build.andel.org/home/welcome/welcome.md): APIs, integration guides, and reference material for partners building with Andel.
+- [Data Exchange API](https://build.andel.org/dataexchange/overview/overview.md): Real-time interchange of member purchases between Andel and counterparty plans or PBMs.
+- [ESI Compatibility](https://build.andel.org/dataexchange/overview/esi-compatibility.md): How the Data Exchange API maps to the Express Scripts CDH 1500-byte accumulator format.
+
+## API Docs
+
+- Data Exchange API > Purchases [List purchases](https://build.andel.org/dataexchange/data-exchange-api/purchases/list-purchases.md)
+- Data Exchange API > Purchases [Get a single purchase](https://build.andel.org/dataexchange/data-exchange-api/purchases/get-purchase.md)
+- Data Exchange API > Webhooks [List your webhook subscriptions](https://build.andel.org/dataexchange/data-exchange-api/webhooks/list-subscriptions.md)
+- Data Exchange API > Webhooks [Subscribe to purchase events](https://build.andel.org/dataexchange/data-exchange-api/webhooks/create-subscription.md)
+- Data Exchange API > Webhooks [Delete a webhook subscription](https://build.andel.org/dataexchange/data-exchange-api/webhooks/delete-subscription.md)
+
+## OpenAPI Specification
+
+The raw OpenAPI 3.1 specification for this API is available at:
+- [OpenAPI JSON](https://build.andel.org/openapi.json)
+- [OpenAPI YAML](https://build.andel.org/openapi.yaml)

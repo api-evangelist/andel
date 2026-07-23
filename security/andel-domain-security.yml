@@ -1,0 +1,36 @@
+generated: '2026-07-17'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: andel.org
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 11 04:25:02 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: api.andel.org
+  https: false
+- host: 7403d846-765d-4d63-9e5c-b7f0ab21a354.mock.pstmn.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 11 07:08:52 2026 GMT
+  hsts: null
+domains:
+- domain: andel.org
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none
+- domain: pstmn.io
+  dnssec: false
+  caa:
+  - 0 issuewild "amazon.com"
+  - 0 issuewild "digicert.com"
+  - 0 issuewild "letsencrypt.org"
+  - 0 issuewild "pki.goog"
+  - 0 iodef "mailto:security@postman.com"
+  - 0 issue "amazon.com"
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

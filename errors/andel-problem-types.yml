@@ -1,0 +1,41 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/andel-data-exchange-openapi.yaml
+format: rfc9457
+envelope:
+  media_type: application/json
+  schema: Problem
+  fields:
+  - type
+  - title
+  - status
+  - detail
+  - instance
+  - andel_request_id
+  extensions:
+    andel_request_id: Andel-issued request identifier; pass to support to trace this request.
+problems:
+- status: 400
+  title: Bad request
+  detail: A query parameter was malformed or invalid (e.g. bad cursor, unknown filter value).
+  source_operation: openapi/andel-data-exchange-openapi.yaml#listPurchases
+- status: 401
+  title: Unauthorized
+  detail: Missing, expired, or invalid bearer token.
+  source_operation: openapi/andel-data-exchange-openapi.yaml#listPurchases
+- status: 403
+  title: Forbidden
+  detail: The token's `plans` claim does not authorize access to the requested plan or resource.
+  source_operation: openapi/andel-data-exchange-openapi.yaml#listPurchases
+- status: 404
+  title: Not found
+  detail: The requested purchase or subscription does not exist.
+  source_operation: openapi/andel-data-exchange-openapi.yaml#getPurchase
+- status: 429
+  title: Too many requests
+  detail: Rate limit exceeded on the purchases endpoint.
+  source_operation: openapi/andel-data-exchange-openapi.yaml#listPurchases
+- status: 500
+  title: Internal server error
+  detail: An unexpected error occurred; retry with backoff and cite andel_request_id to support.
+  source_operation: openapi/andel-data-exchange-openapi.yaml#listPurchases

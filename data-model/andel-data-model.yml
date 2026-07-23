@@ -1,0 +1,58 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/andel-data-exchange-openapi.yaml
+entities:
+- name: Purchase
+  id_field: purchase_id
+  description: A member purchase event on the Data Exchange (RFC-9457 sibling of a claim, not a regulated-claims feed).
+  key_fields: [purchase_id, member_id, plan_id, ndc, prescriber_spi, purchased_at, member_purchase_amount, oop_amount, plan_contribution, status, event_type]
+- name: Accumulator
+  description: Deductible/out-of-pocket accumulator detail embedded on a purchase.
+  key_fields: [type_of_benefit_account, participation_type, cr_db_indicator]
+- name: EsiIdentity
+  description: Express Scripts (ESI) CDH accumulator-format identity/transmission block embedded on a purchase.
+  key_fields: [transmission_type, request_code]
+- name: Subscription
+  id_field: subscription_id
+  description: A webhook subscription for purchase events.
+  key_fields: [subscription_id, url, event_types, description]
+relationships:
+- from: Purchase
+  to: Plan
+  type: belongs_to
+  via: plan_id
+- from: Purchase
+  to: Member
+  type: belongs_to
+  via: member_id
+- from: Purchase
+  to: Subscriber
+  type: belongs_to
+  via: subscriber_id
+- from: Purchase
+  to: Prescriber
+  type: belongs_to
+  via: prescriber_spi
+- from: Purchase
+  to: Purchase
+  type: belongs_to
+  via: original_purchase_id
+  note: Reversals/adjustments reference the original purchase.
+- from: Purchase
+  to: Accumulator
+  type: has_many
+  via: accumulators
+- from: Purchase
+  to: EsiIdentity
+  type: has_one
+  via: esi
+- from: Subscription
+  to: Purchase
+  type: has_many
+  via: event_types
+  note: A subscription delivers purchase.created events.
+notes: >-
+  Plan, Member, Subscriber, and Prescriber are referenced by id/SPI on Purchase
+  but are not first-class resources exposed by the Data Exchange API. member_id
+  is a plan/PBM member identifier; prescriber_spi is a prescriber SPI; ndc is an
+  NDC-11 drug code.

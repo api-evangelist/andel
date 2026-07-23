@@ -1,0 +1,29 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/andel-data-exchange-openapi.yaml
+standards:
+- id: rfc9457-problem-details
+  conforms: true
+  evidence: Error responses use a Problem schema described as "RFC 9457 problem details with Andel extensions".
+- id: oauth2
+  conforms: true
+  evidence: OAuth 2.0 client-credentials + authorization-code (PKCE) flows; tokens issued by Descope, presented as HTTP bearer.
+- id: rfc8414-oauth-metadata
+  conforms: false
+  evidence: No /.well-known/oauth-authorization-server (probed 404).
+- id: oidc-discovery
+  conforms: false
+  evidence: No /.well-known/openid-configuration (probed 404).
+- id: cursor-pagination
+  conforms: true
+  evidence: List endpoints paginate via `since`/`limit` cursor, ordered by purchased_at descending.
+- id: esi-cdh-accumulator
+  conforms: true
+  evidence: Purchase payload maps to the Express Scripts CDH 1500-byte accumulator format (ESI compatibility doc + Esi/Accumulator schemas).
+- id: openapi-3.1
+  conforms: true
+  evidence: Published OpenAPI 3.1.0 specification.
+notes: >-
+  Standards conformance is derived from the published OpenAPI and docs; this is
+  not an audited compliance program. No SOC 2 / ISO 27001 / HIPAA certification
+  claims were found on the public site, so no Compliance pointer is emitted.

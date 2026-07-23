@@ -1,0 +1,23 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/andel-data-exchange-openapi.yaml
+docs: https://build.andel.org/dataexchange/overview/overview
+modes:
+- name: sandbox
+  base_url: https://7403d846-765d-4d63-9e5c-b7f0ab21a354.mock.pstmn.io/exchange/v1
+  description: Postman mock server. Auth is NOT enforced in sandbox.
+  auth_enforced: false
+- name: production
+  base_url: https://api.andel.org/exchange/v1
+  description: Production host (described as planned in current docs).
+  auth_enforced: true
+guided_auth:
+  tool: Postman Guided Auth
+  flow: authorizationCode + PKCE
+  scheme: andelDescopeAuthCode
+notes: >-
+  Andel publishes a Postman mock server as the sandbox environment for the Data
+  Exchange API; requests against the mock return example payloads and do not
+  enforce OAuth. Developer exploration uses Postman Guided Auth (authorization
+  code + PKCE). No published test card numbers or magic member identifiers were
+  found; do not invent test values.
