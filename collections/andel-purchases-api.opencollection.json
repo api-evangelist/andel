@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Data Exchange purchases API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "purchases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List purchases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.andel.org/exchange/v1/purchases",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "member_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter purchases to a single member."
+              },
+              {
+                "name": "plan_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter purchases to a single plan. Must be one of the plans the token is authorized for; otherwise the API returns `403 Forbidden`."
+              },
+              {
+                "name": "ndc",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a single NDC-11 drug code."
+              },
+              {
+                "name": "prescriber_spi",
+                "value": "",
+                "type": "query",
+                "description": "Filter to purchases written by a specific prescriber (Surescripts SPI)."
+              },
+              {
+                "name": "event_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter purchases to a single event type (e.g., only reversals)."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter purchases by processing status (e.g., only rejected)."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Cursor or ISO 8601 UTC timestamp. Returns purchases after this point."
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 UTC timestamp upper bound (exclusive)."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Max results per page."
+              }
+            ]
+          },
+          "docs": "List purchases visible to the authenticated tenant, ordered by\n`purchased_at` descending. Use cursor pagination via `since` and `limit`.\n"
+        },
+        {
+          "info": {
+            "name": "Get a single purchase",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.andel.org/exchange/v1/purchases/:purchase_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "purchase_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single purchase"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

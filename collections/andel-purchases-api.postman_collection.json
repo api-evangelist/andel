@@ -1,0 +1,881 @@
+{
+  "item": [
+    {
+      "id": "0f16aca1-45f2-4fcd-85cd-6dd2cf45d710",
+      "name": "purchases",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dd61ad8e-db91-43e7-a501-933c74f9267c",
+          "name": "List purchases",
+          "request": {
+            "name": "List purchases",
+            "description": {
+              "content": "List purchases visible to the authenticated tenant, ordered by\n`purchased_at` descending. Use cursor pagination via `since` and `limit`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "purchases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "member_id",
+                  "value": "<string>",
+                  "description": "Filter purchases to a single member."
+                },
+                {
+                  "disabled": false,
+                  "key": "plan_id",
+                  "value": "<string>",
+                  "description": "Filter purchases to a single plan. Must be one of the plans the token is authorized for; otherwise the API returns `403 Forbidden`."
+                },
+                {
+                  "disabled": false,
+                  "key": "ndc",
+                  "value": "<string>",
+                  "description": "Filter to a single NDC-11 drug code."
+                },
+                {
+                  "disabled": false,
+                  "key": "prescriber_spi",
+                  "value": "<string>",
+                  "description": "Filter to purchases written by a specific prescriber (Surescripts SPI)."
+                },
+                {
+                  "disabled": false,
+                  "key": "event_type",
+                  "value": "<string>",
+                  "description": "Filter purchases to a single event type (e.g., only reversals)."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter purchases by processing status (e.g., only rejected)."
+                },
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<string>",
+                  "description": "Cursor or ISO 8601 UTC timestamp. Returns purchases after this point."
+                },
+                {
+                  "disabled": false,
+                  "key": "until",
+                  "value": "<dateTime>",
+                  "description": "ISO 8601 UTC timestamp upper bound (exclusive)."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Max results per page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c535dc8c-726b-42f4-9f94-8638b360bdc3",
+              "name": "A page of purchases.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ndc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prescriber_spi",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "adjustment"
+                    },
+                    {
+                      "key": "status",
+                      "value": "reversed"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"purchase_id\": \"2b8359ab-c9bd-d349-a265-a9569e59d3c9\",\n      \"member_id\": \"string\",\n      \"plan_id\": \"string\",\n      \"purchased_at\": \"2019-11-24T23:04:05.859Z\",\n      \"currency\": \"USD\",\n      \"date_of_service\": \"2025-06-03\",\n      \"event_type\": \"claim\",\n      \"ndc\": \"string\",\n      \"prescriber_spi\": \"string\",\n      \"member_purchase_amount\": 5960.592706091128,\n      \"oop_amount\": 4437.534521780154,\n      \"plan_contribution\": 6439.03527728174,\n      \"quantity\": 9026,\n      \"days_supply\": 7203,\n      \"provider_type\": \"npi\",\n      \"pharmacy_npi\": \"string\",\n      \"network_ind\": \"out_of_network\",\n      \"original_purchase_id\": \"dc9b6a0f-a88a-ba77-ed21-0fcdebb8a569\",\n      \"status\": \"pended\",\n      \"deductible_applied\": 4441.155464198878,\n      \"subscriber_id\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"date_of_birth\": \"2009-09-27\",\n      \"gender\": \"female\",\n      \"relationship\": \"spouse\",\n      \"accumulators\": [\n        {\n          \"type_of_benefit_account\": \"oop\",\n          \"amount\": 7974.690097086635,\n          \"cr_db_indicator\": \"bypass\",\n          \"participation_type\": \"inn_house\",\n          \"accumulated_amount\": 5314.275614840381,\n          \"remaining_amount\": 3788.981042046484,\n          \"met_this_transaction\": false\n        },\n        {\n          \"type_of_benefit_account\": \"cap\",\n          \"amount\": 123.33007756890169,\n          \"cr_db_indicator\": \"credit\",\n          \"participation_type\": \"inn_house\",\n          \"accumulated_amount\": 8897.292605959996,\n          \"remaining_amount\": 9540.431848104081,\n          \"met_this_transaction\": true\n        }\n      ],\n      \"origin_code\": \"E\",\n      \"plan_year\": 7341,\n      \"esi\": {\n        \"sender_id\": \"string\",\n        \"receiver_id\": \"string\",\n        \"signature\": \"string\",\n        \"claim_id\": \"string\",\n        \"claim_xref_id\": \"string\",\n        \"transmission_type\": \"DQ\",\n        \"request_code\": \"02\",\n        \"response_code\": \"string\",\n        \"reason_code\": \"string\"\n      }\n    },\n    {\n      \"purchase_id\": \"d6d33417-e472-e9f4-8730-f9d768fe9e10\",\n      \"member_id\": \"string\",\n      \"plan_id\": \"string\",\n      \"purchased_at\": \"1982-08-22T17:25:16.579Z\",\n      \"currency\": \"USD\",\n      \"date_of_service\": \"2010-03-15\",\n      \"event_type\": \"claim\",\n      \"ndc\": \"string\",\n      \"prescriber_spi\": \"string\",\n      \"member_purchase_amount\": 6410.560258266364,\n      \"oop_amount\": 8599.576447296165,\n      \"plan_contribution\": 8219.439849714405,\n      \"quantity\": 2830,\n      \"days_supply\": 7000,\n      \"provider_type\": \"npi\",\n      \"pharmacy_npi\": \"string\",\n      \"network_ind\": \"out_of_network\",\n      \"original_purchase_id\": \"d2fcbe24-26d7-c9bb-5928-f85fe7e54c86\",\n      \"status\": \"rejected\",\n      \"deductible_applied\": 2352.353159374667,\n      \"subscriber_id\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"date_of_birth\": \"1966-03-12\",\n      \"gender\": \"non_binary\",\n      \"relationship\": \"disabled_dependent\",\n      \"accumulators\": [\n        {\n          \"type_of_benefit_account\": \"cap\",\n          \"amount\": 5402.617167521987,\n          \"cr_db_indicator\": \"debit\",\n          \"participation_type\": \"in_network\",\n          \"accumulated_amount\": 4842.139254663398,\n          \"remaining_amount\": 5416.580902442911,\n          \"met_this_transaction\": false\n        },\n        {\n          \"type_of_benefit_account\": \"drug_cap\",\n          \"amount\": 3886.8421655581565,\n          \"cr_db_indicator\": \"debit\",\n          \"participation_type\": \"out_of_network\",\n          \"accumulated_amount\": 7302.544652617461,\n          \"remaining_amount\": 3116.406945701814,\n          \"met_this_transaction\": false\n        }\n      ],\n      \"origin_code\": \"E\",\n      \"plan_year\": 6406,\n      \"esi\": {\n        \"sender_id\": \"string\",\n        \"receiver_id\": \"string\",\n        \"signature\": \"string\",\n        \"claim_id\": \"string\",\n        \"claim_xref_id\": \"string\",\n        \"transmission_type\": \"DR\",\n        \"request_code\": \"01\",\n        \"response_code\": \"string\",\n        \"reason_code\": \"string\"\n      }\n    }\n  ],\n  \"next_cursor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f85cab96-22bc-40c3-8b66-2545aec2a331",
+              "name": "Invalid request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ndc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prescriber_spi",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "adjustment"
+                    },
+                    {
+                      "key": "status",
+                      "value": "reversed"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0092f882-b163-4cc0-9421-16b6afe24086",
+              "name": "Missing or invalid token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ndc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prescriber_spi",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "adjustment"
+                    },
+                    {
+                      "key": "status",
+                      "value": "reversed"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1fd2eb87-cf0c-4aa4-aabb-2b32a1ef4bd1",
+              "name": "Token lacks the required scope, or is not authorized for the requested `plan_id`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ndc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prescriber_spi",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "adjustment"
+                    },
+                    {
+                      "key": "status",
+                      "value": "reversed"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72c24082-cd5e-4622-8fc1-ae632dfc61aa",
+              "name": "Too many requests. Backoff and retry.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ndc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prescriber_spi",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "adjustment"
+                    },
+                    {
+                      "key": "status",
+                      "value": "reversed"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75cc5297-9b74-438c-b262-fc7630655ae6",
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "plan_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "ndc",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prescriber_spi",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "event_type",
+                      "value": "adjustment"
+                    },
+                    {
+                      "key": "status",
+                      "value": "reversed"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "266e7996-c506-49d6-b88f-30f03294c821",
+          "name": "Get a single purchase",
+          "request": {
+            "name": "Get a single purchase",
+            "description": {},
+            "url": {
+              "path": [
+                "purchases",
+                ":purchase_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "purchase_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7fe6d546-6a00-4724-a6ac-050ad3f37571",
+              "name": "A single purchase.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases",
+                    ":purchase_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "purchase_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"purchase_id\": \"f8232d9a-631a-e726-fb24-e3c55ea94e87\",\n  \"member_id\": \"string\",\n  \"plan_id\": \"string\",\n  \"purchased_at\": \"1977-10-29T17:08:12.510Z\",\n  \"currency\": \"USD\",\n  \"date_of_service\": \"2016-11-19\",\n  \"event_type\": \"claim\",\n  \"ndc\": \"string\",\n  \"prescriber_spi\": \"string\",\n  \"member_purchase_amount\": 1261.11115250937,\n  \"oop_amount\": 7830.922238715369,\n  \"plan_contribution\": 5394.8840966628295,\n  \"quantity\": 4889,\n  \"days_supply\": 1275,\n  \"provider_type\": \"dea\",\n  \"pharmacy_npi\": \"string\",\n  \"network_ind\": \"in_network\",\n  \"original_purchase_id\": \"85bda4eb-f226-72c0-4ff1-38e5ee98d5a9\",\n  \"status\": \"pended\",\n  \"deductible_applied\": 4876.294898785081,\n  \"subscriber_id\": \"string\",\n  \"first_name\": \"string\",\n  \"last_name\": \"string\",\n  \"date_of_birth\": \"1961-11-10\",\n  \"gender\": \"male\",\n  \"relationship\": \"domestic_partner\",\n  \"accumulators\": [\n    {\n      \"type_of_benefit_account\": \"hra\",\n      \"amount\": 3999.1941512370777,\n      \"cr_db_indicator\": \"replace\",\n      \"participation_type\": \"combined\",\n      \"accumulated_amount\": 8476.525215410318,\n      \"remaining_amount\": 1253.7565900467762,\n      \"met_this_transaction\": false\n    },\n    {\n      \"type_of_benefit_account\": \"benefit_deductible\",\n      \"amount\": 781.9296233302364,\n      \"cr_db_indicator\": \"debit\",\n      \"participation_type\": \"combined\",\n      \"accumulated_amount\": 799.8207664391443,\n      \"remaining_amount\": 7368.680333216721,\n      \"met_this_transaction\": false\n    }\n  ],\n  \"origin_code\": \"E\",\n  \"plan_year\": 9357,\n  \"esi\": {\n    \"sender_id\": \"string\",\n    \"receiver_id\": \"string\",\n    \"signature\": \"string\",\n    \"claim_id\": \"string\",\n    \"claim_xref_id\": \"string\",\n    \"transmission_type\": \"DR\",\n    \"request_code\": \"02\",\n    \"response_code\": \"string\",\n    \"reason_code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16237861-1901-4236-ba88-9874ff4e0ff8",
+              "name": "Missing or invalid token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases",
+                    ":purchase_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "purchase_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a17918d9-7900-4870-a079-f4b5db4d99b0",
+              "name": "Token lacks the required scope, or is not authorized for the requested `plan_id`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases",
+                    ":purchase_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "purchase_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "daf877f8-64fe-4848-9a47-e895a2c1530e",
+              "name": "Resource not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases",
+                    ":purchase_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "purchase_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e35083d-d5b1-4090-be7d-814ec6a31b82",
+              "name": "Unexpected server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "purchases",
+                    ":purchase_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "purchase_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Production machine-to-machine flow. Tokens issued by Descope.",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://SiYudffJmciUDhgWDhnKooQdJ.eavxcO1ooRb+m4G11d\",\n  \"title\": \"string\",\n  \"status\": 6106,\n  \"detail\": \"string\",\n  \"instance\": \"string\",\n  \"andel_request_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.andel.org/exchange/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3e17cdc9-e888-4e28-9a9a-0fe21c720177",
+    "name": "Data Exchange purchases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}
