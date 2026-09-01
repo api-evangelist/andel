@@ -75,7 +75,7 @@ apis:
   humanURL: https://build.andel.org/dataexchange
   baseURL: https://api.andel.org/exchange/v1
   tags:
-  - purchases
+  - Purchases
   tags_raw:
   - purchases
   properties:
