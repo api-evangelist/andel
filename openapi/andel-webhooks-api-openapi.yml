@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Data Exchange purchases webhooks API
+  title: Data Exchange Webhooks API
   version: 1.0.0
 servers:
 - url: https://api.andel.org/exchange/v1
@@ -8,14 +8,14 @@ servers:
 - url: https://7403d846-765d-4d63-9e5c-b7f0ab21a354.mock.pstmn.io/exchange/v1
   description: Postman mock server (sandbox; auth is not enforced)
 tags:
-- name: webhooks
+- name: Webhooks
 paths:
   /webhooks/subscriptions:
     get:
       operationId: listSubscriptions
       summary: List your webhook subscriptions
       tags:
-      - webhooks
+      - Webhooks
       parameters:
       - name: Authorization
         in: header
@@ -46,7 +46,7 @@ paths:
       operationId: createSubscription
       summary: Subscribe to purchase events
       tags:
-      - webhooks
+      - Webhooks
       parameters:
       - name: Authorization
         in: header
@@ -89,7 +89,7 @@ paths:
       operationId: deleteSubscription
       summary: Delete a webhook subscription
       tags:
-      - webhooks
+      - Webhooks
       parameters:
       - name: subscription_id
         in: path
@@ -131,24 +131,6 @@ paths:
                 $ref: '#/components/schemas/Problem'
 components:
   schemas:
-    SubscriptionCreate:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: HTTPS endpoint where Andel will POST events.
-        event_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
-        description:
-          type: string
-          description: Human-readable label for this subscription.
-      required:
-      - url
-      - event_types
-      title: SubscriptionCreate
     Subscription:
       type: object
       properties:
@@ -173,6 +155,24 @@ components:
       - event_types
       - created_at
       title: Subscription
+    SubscriptionCreate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: HTTPS endpoint where Andel will POST events.
+        event_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
+        description:
+          type: string
+          description: Human-readable label for this subscription.
+      required:
+      - url
+      - event_types
+      title: SubscriptionCreate
     Problem:
       type: object
       properties:
@@ -196,6 +196,21 @@ components:
       - status
       description: RFC 9457 problem details with Andel extensions.
       title: Problem
+    SubscriptionCreateEventTypesItems:
+      type: string
+      enum:
+      - purchase.created
+      title: SubscriptionCreateEventTypesItems
+    SubscriptionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+      required:
+      - data
+      title: SubscriptionList
     SubscriptionWithSecret:
       type: object
       properties:
@@ -224,21 +239,6 @@ components:
       - created_at
       - signing_secret
       title: SubscriptionWithSecret
-    SubscriptionCreateEventTypesItems:
-      type: string
-      enum:
-      - purchase.created
-      title: SubscriptionCreateEventTypesItems
-    SubscriptionList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-      required:
-      - data
-      title: SubscriptionList
   securitySchemes:
     andelDescopeClientCredentials:
       type: http
