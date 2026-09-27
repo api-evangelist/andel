@@ -131,86 +131,6 @@ paths:
                 $ref: '#/components/schemas/Problem'
 components:
   schemas:
-    Subscription:
-      type: object
-      properties:
-        subscription_id:
-          type: string
-          format: uuid
-        url:
-          type: string
-          format: uri
-        event_types:
-          type: array
-          items:
-            type: string
-        description:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-      required:
-      - subscription_id
-      - url
-      - event_types
-      - created_at
-      title: Subscription
-    SubscriptionCreate:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: HTTPS endpoint where Andel will POST events.
-        event_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
-        description:
-          type: string
-          description: Human-readable label for this subscription.
-      required:
-      - url
-      - event_types
-      title: SubscriptionCreate
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        instance:
-          type: string
-        andel_request_id:
-          type: string
-          description: Pass to support to trace this request.
-      required:
-      - type
-      - title
-      - status
-      description: RFC 9457 problem details with Andel extensions.
-      title: Problem
-    SubscriptionCreateEventTypesItems:
-      type: string
-      enum:
-      - purchase.created
-      title: SubscriptionCreateEventTypesItems
-    SubscriptionList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-      required:
-      - data
-      title: SubscriptionList
     SubscriptionWithSecret:
       type: object
       properties:
@@ -239,6 +159,86 @@ components:
       - created_at
       - signing_secret
       title: SubscriptionWithSecret
+    SubscriptionCreate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: HTTPS endpoint where Andel will POST events.
+        event_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
+        description:
+          type: string
+          description: Human-readable label for this subscription.
+      required:
+      - url
+      - event_types
+      title: SubscriptionCreate
+    Subscription:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        event_types:
+          type: array
+          items:
+            type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - subscription_id
+      - url
+      - event_types
+      - created_at
+      title: Subscription
+    SubscriptionCreateEventTypesItems:
+      type: string
+      enum:
+      - purchase.created
+      title: SubscriptionCreateEventTypesItems
+    SubscriptionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+      required:
+      - data
+      title: SubscriptionList
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        andel_request_id:
+          type: string
+          description: Pass to support to trace this request.
+      required:
+      - type
+      - title
+      - status
+      description: RFC 9457 problem details with Andel extensions.
+      title: Problem
   securitySchemes:
     andelDescopeClientCredentials:
       type: http

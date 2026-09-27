@@ -74,7 +74,7 @@ maintainers:
   email: info@apis.io
 apis:
 - aid: andel:andel-purchases-api
-  name: Andel purchases API
+  name: Andel Purchases API
   description: The purchases API from Andel — 2 operation(s) for purchases.
   humanURL: https://build.andel.org/dataexchange
   baseURL: https://api.andel.org/exchange/v1
@@ -88,7 +88,7 @@ apis:
   - type: Documentation
     url: https://build.andel.org/dataexchange/overview/overview
 - aid: andel:andel-webhooks-api
-  name: Andel webhooks API
+  name: Andel Webhooks API
   description: The webhooks API from Andel — 2 operation(s) for webhooks.
   humanURL: https://build.andel.org/dataexchange
   baseURL: https://api.andel.org/exchange/v1
