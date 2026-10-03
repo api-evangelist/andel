@@ -131,6 +131,34 @@ paths:
                 $ref: '#/components/schemas/Problem'
 components:
   schemas:
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        andel_request_id:
+          type: string
+          description: Pass to support to trace this request.
+      required:
+      - type
+      - title
+      - status
+      description: RFC 9457 problem details with Andel extensions.
+      title: Problem
+    SubscriptionCreateEventTypesItems:
+      type: string
+      enum:
+      - purchase.created
+      title: SubscriptionCreateEventTypesItems
     SubscriptionWithSecret:
       type: object
       properties:
@@ -177,6 +205,16 @@ components:
       - url
       - event_types
       title: SubscriptionCreate
+    SubscriptionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+      required:
+      - data
+      title: SubscriptionList
     Subscription:
       type: object
       properties:
@@ -201,44 +239,6 @@ components:
       - event_types
       - created_at
       title: Subscription
-    SubscriptionCreateEventTypesItems:
-      type: string
-      enum:
-      - purchase.created
-      title: SubscriptionCreateEventTypesItems
-    SubscriptionList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-      required:
-      - data
-      title: SubscriptionList
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        instance:
-          type: string
-        andel_request_id:
-          type: string
-          description: Pass to support to trace this request.
-      required:
-      - type
-      - title
-      - status
-      description: RFC 9457 problem details with Andel extensions.
-      title: Problem
   securitySchemes:
     andelDescopeClientCredentials:
       type: http
