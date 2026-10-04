@@ -171,57 +171,6 @@ paths:
                 $ref: '#/components/schemas/Problem'
 components:
   schemas:
-    Problem:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-        title:
-          type: string
-        status:
-          type: integer
-        detail:
-          type: string
-        instance:
-          type: string
-        andel_request_id:
-          type: string
-          description: Pass to support to trace this request.
-      required:
-      - type
-      - title
-      - status
-      description: RFC 9457 problem details with Andel extensions.
-      title: Problem
-    AccumulatorParticipationType:
-      type: string
-      enum:
-      - in_network
-      - out_of_network
-      - combined
-      - inn_house
-      description: Network level this accumulator tracks (may differ per accumulator).
-      title: AccumulatorParticipationType
-    PurchaseOriginCode:
-      type: string
-      enum:
-      - E
-      - R
-      description: ESI origin code for HRA balance events (`hra_initial_load`, `hra_rollover`, `hra_incentive`); `E` is a non-shared pharmacy dollars load. Omitted for pharmacy fills.
-      title: PurchaseOriginCode
-    PurchaseRelationship:
-      type: string
-      enum:
-      - subscriber
-      - spouse
-      - dependent
-      - student
-      - disabled_dependent
-      - adult_dependent
-      - domestic_partner
-      description: Member's relationship to the subscriber.
-      title: PurchaseRelationship
     AccumulatorTypeOfBenefitAccount:
       type: string
       enum:
@@ -238,49 +187,6 @@ components:
       - tmoop
       description: Which benefit accumulator this delta applies to.
       title: AccumulatorTypeOfBenefitAccount
-    PurchasesGetParametersEventType:
-      type: string
-      enum:
-      - claim
-      - reversal
-      - adjustment
-      - hra_initial_load
-      - hra_rollover
-      - hra_incentive
-      title: PurchasesGetParametersEventType
-    EsiIdentityTransmissionType:
-      type: string
-      enum:
-      - DQ
-      - DR
-      description: Data Request (sent) vs Data Response (acknowledged).
-      title: EsiIdentityTransmissionType
-    EsiIdentityRequestCode:
-      type: string
-      enum:
-      - '01'
-      - '02'
-      - '04'
-      description: Claim / Reversal / Adjustment request code.
-      title: EsiIdentityRequestCode
-    PurchaseGender:
-      type: string
-      enum:
-      - unknown
-      - male
-      - female
-      - non_binary
-      description: Member gender as carried to the PBM.
-      title: PurchaseGender
-    PurchaseNetworkInd:
-      type: string
-      enum:
-      - in_network
-      - out_of_network
-      - both
-      - inn_house
-      description: Whether the fill adjudicated in- or out-of-network.
-      title: PurchaseNetworkInd
     EsiIdentity:
       type: object
       properties:
@@ -313,14 +219,6 @@ components:
           description: Granular reason detail beyond the response code.
       description: ESI wire-protocol identifiers, populated when a purchase is exchanged via the ESI CDH format. All fields optional.
       title: EsiIdentity
-    PurchasesGetParametersStatus:
-      type: string
-      enum:
-      - accepted
-      - rejected
-      - pended
-      - reversed
-      title: PurchasesGetParametersStatus
     AccumulatorCrDbIndicator:
       type: string
       enum:
@@ -330,22 +228,57 @@ components:
       - bypass
       description: '`debit` consumes the accumulator, `credit` restores it (a reversal), `replace` overwrites the running total, `bypass` ignores this accumulator for this transaction.'
       title: AccumulatorCrDbIndicator
-    PurchaseList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Purchase'
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Pass as `since` to fetch the next page. Null when no more pages.
-      required:
-      - data
-      - next_cursor
-      title: PurchaseList
+    PurchasesGetParametersStatus:
+      type: string
+      enum:
+      - accepted
+      - rejected
+      - pended
+      - reversed
+      title: PurchasesGetParametersStatus
+    PurchaseRelationship:
+      type: string
+      enum:
+      - subscriber
+      - spouse
+      - dependent
+      - student
+      - disabled_dependent
+      - adult_dependent
+      - domestic_partner
+      description: Member's relationship to the subscriber.
+      title: PurchaseRelationship
+    PurchaseGender:
+      type: string
+      enum:
+      - unknown
+      - male
+      - female
+      - non_binary
+      description: Member gender as carried to the PBM.
+      title: PurchaseGender
+    PurchaseEventType:
+      type: string
+      enum:
+      - claim
+      - reversal
+      - adjustment
+      - hra_initial_load
+      - hra_rollover
+      - hra_incentive
+      default: claim
+      description: The kind of accumulator event. `claim` is a normal fill; `reversal` restores accumulators for a returned or voided fill; `adjustment` is a flat or paired correction.
+      title: PurchaseEventType
+    PurchasesGetParametersEventType:
+      type: string
+      enum:
+      - claim
+      - reversal
+      - adjustment
+      - hra_initial_load
+      - hra_rollover
+      - hra_incentive
+      title: PurchasesGetParametersEventType
     Accumulator:
       type: object
       properties:
@@ -379,18 +312,30 @@ components:
       - cr_db_indicator
       description: A per-accumulator delta applied by a purchase. A single fill can apply against up to six accumulators at once.
       title: Accumulator
-    PurchaseEventType:
+    PurchaseList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Purchase'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Pass as `since` to fetch the next page. Null when no more pages.
+      required:
+      - data
+      - next_cursor
+      title: PurchaseList
+    EsiIdentityRequestCode:
       type: string
       enum:
-      - claim
-      - reversal
-      - adjustment
-      - hra_initial_load
-      - hra_rollover
-      - hra_incentive
-      default: claim
-      description: The kind of accumulator event. `claim` is a normal fill; `reversal` restores accumulators for a returned or voided fill; `adjustment` is a flat or paired correction.
-      title: PurchaseEventType
+      - '01'
+      - '02'
+      - '04'
+      description: Claim / Reversal / Adjustment request code.
+      title: EsiIdentityRequestCode
     PurchaseProviderType:
       type: string
       enum:
@@ -400,15 +345,38 @@ components:
       - copay_assist
       description: Qualifier describing which provider identifier is carried in the provider slot.
       title: PurchaseProviderType
-    PurchaseStatus:
+    PurchaseNetworkInd:
       type: string
       enum:
-      - accepted
-      - rejected
-      - pended
-      - reversed
-      description: Processing status of the purchase.
-      title: PurchaseStatus
+      - in_network
+      - out_of_network
+      - both
+      - inn_house
+      description: Whether the fill adjudicated in- or out-of-network.
+      title: PurchaseNetworkInd
+    Problem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        andel_request_id:
+          type: string
+          description: Pass to support to trace this request.
+      required:
+      - type
+      - title
+      - status
+      description: RFC 9457 problem details with Andel extensions.
+      title: Problem
     Purchase:
       type: object
       properties:
@@ -524,6 +492,38 @@ components:
       - date_of_service
       - event_type
       title: Purchase
+    PurchaseStatus:
+      type: string
+      enum:
+      - accepted
+      - rejected
+      - pended
+      - reversed
+      description: Processing status of the purchase.
+      title: PurchaseStatus
+    AccumulatorParticipationType:
+      type: string
+      enum:
+      - in_network
+      - out_of_network
+      - combined
+      - inn_house
+      description: Network level this accumulator tracks (may differ per accumulator).
+      title: AccumulatorParticipationType
+    PurchaseOriginCode:
+      type: string
+      enum:
+      - E
+      - R
+      description: ESI origin code for HRA balance events (`hra_initial_load`, `hra_rollover`, `hra_incentive`); `E` is a non-shared pharmacy dollars load. Omitted for pharmacy fills.
+      title: PurchaseOriginCode
+    EsiIdentityTransmissionType:
+      type: string
+      enum:
+      - DQ
+      - DR
+      description: Data Request (sent) vs Data Response (acknowledged).
+      title: EsiIdentityTransmissionType
   securitySchemes:
     andelDescopeClientCredentials:
       type: http
