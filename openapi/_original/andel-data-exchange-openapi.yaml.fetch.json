@@ -1,0 +1,12 @@
+{
+ "url": "https://build.andel.org/openapi.yaml",
+ "requested_url": "https://build.andel.org/openapi.yaml",
+ "status": 200,
+ "content_type": "application/x-yaml; charset=utf-8",
+ "bytes": 24018,
+ "sha256": "eb94ffbeefa80d78d2a4b75eda835b63a25ce7f67f3de74429470e22be3dd3dd",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
