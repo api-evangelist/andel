@@ -159,6 +159,29 @@ components:
       - created_at
       - signing_secret
       title: SubscriptionWithSecret
+    SubscriptionCreateEventTypesItems:
+      type: string
+      enum:
+      - purchase.created
+      title: SubscriptionCreateEventTypesItems
+    SubscriptionCreate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: HTTPS endpoint where Andel will POST events.
+        event_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
+        description:
+          type: string
+          description: Human-readable label for this subscription.
+      required:
+      - url
+      - event_types
+      title: SubscriptionCreate
     Problem:
       type: object
       properties:
@@ -182,21 +205,6 @@ components:
       - status
       description: RFC 9457 problem details with Andel extensions.
       title: Problem
-    SubscriptionCreateEventTypesItems:
-      type: string
-      enum:
-      - purchase.created
-      title: SubscriptionCreateEventTypesItems
-    SubscriptionList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-      required:
-      - data
-      title: SubscriptionList
     Subscription:
       type: object
       properties:
@@ -221,24 +229,16 @@ components:
       - event_types
       - created_at
       title: Subscription
-    SubscriptionCreate:
+    SubscriptionList:
       type: object
       properties:
-        url:
-          type: string
-          format: uri
-          description: HTTPS endpoint where Andel will POST events.
-        event_types:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/SubscriptionCreateEventTypesItems'
-        description:
-          type: string
-          description: Human-readable label for this subscription.
+            $ref: '#/components/schemas/Subscription'
       required:
-      - url
-      - event_types
-      title: SubscriptionCreate
+      - data
+      title: SubscriptionList
   securitySchemes:
     andelDescopeClientCredentials:
       type: http
